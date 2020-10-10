@@ -1,0 +1,10 @@
+# Satellites coordinates
+KENOBI_COORD = [-500, -200]
+SKYWALKER_COORD = [100, -100]
+SATO_COORD = [500, 100]
+
+SATELLITES = [
+    KENOBI_COORD,
+    SKYWALKER_COORD,
+    SATO_COORD
+]
