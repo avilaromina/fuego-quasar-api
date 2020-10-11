@@ -51,16 +51,16 @@ def _coordinates_are_valid(coordinates, distances, satellites):
 
 def getMessage(msg_array):
     try:
-        msg_len = len(min(msg_array))
+        msg_len = min(len(msg) for msg in msg_array)
         final_msg = ''
         i = 1
         while i <= msg_len:
-            palabra = None
+            word = None
             for msg in msg_array:
-                if palabra is not None and msg[-i] != palabra and msg[-i] != '':
+                if word is not None and msg[-i] != word and msg[-i] != '':
                     return None
-                palabra = palabra if msg[-i] == '' else msg[-i]
-            final_msg = ' ' + palabra + final_msg
+                word = word if msg[-i] == '' else msg[-i]
+            final_msg = ' ' + word + final_msg
             i += 1
         return final_msg[1:]
     except TypeError:

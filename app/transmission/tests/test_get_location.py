@@ -49,5 +49,5 @@ class GetMessageTests(TestCase):
 
     def test_get_message_with_delay(self):
         """Test that the correct message is display"""
-        msg = getMessage([["", "", "!"], ["", "mundo", ""], ["", "Hola", "", "!"]])
+        msg = getMessage([["", "", "!"], ["", "mundo", ""], ["", "", "", "", "Hola", "", "!"]])
         self.assertEqual(msg, "Hola mundo !")
