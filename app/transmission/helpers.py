@@ -47,3 +47,21 @@ def _coordinates_are_valid(coordinates, distances, satellites):
         ):
             return False
     return True
+
+
+def getMessage(msg_array):
+    try:
+        msg_len = len(min(msg_array))
+        final_msg = ''
+        i = 1
+        while i <= msg_len:
+            palabra = None
+            for msg in msg_array:
+                if palabra is not None and msg[-i] != palabra and msg[-i] != '':
+                    return None
+                palabra = palabra if msg[-i] == '' else msg[-i]
+            final_msg = ' ' + palabra + final_msg
+            i += 1
+        return final_msg[1:]
+    except TypeError:
+        pass

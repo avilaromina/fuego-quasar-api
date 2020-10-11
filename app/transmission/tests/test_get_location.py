@@ -1,6 +1,9 @@
 from django.test import TestCase
 
-from transmission.helpers import getLocation
+from transmission.helpers import (
+    getLocation,
+    getMessage,
+)
 
 
 class GetLocationTests(TestCase):
@@ -22,6 +25,29 @@ class GetLocationTests(TestCase):
         self.assertRaises(TypeError, getLocation([485.7, 266.1, 'Text']))
 
     def test_cant_get_location_invalid_distances(self):
-        """Test that the location is not return because the tree distances are invalid"""
+        """Test that the location is not return because distances do not correspond to a valid coordinate"""
         coord = getLocation([485.7, 266.1, 600])
         self.assertIsNone(coord)
+
+
+class GetMessageTests(TestCase):
+    """Test the GetMessage method"""
+
+    def test_get_message(self):
+        """Test that the correct message is display"""
+        msg = getMessage([["", "", "!"], ["", "mundo", ""], ["Hola", "", "!"]])
+        self.assertEqual(msg, "Hola mundo !")
+
+    def test_incomplete_message(self):
+        """Test that the message cant be display because is incomplete"""
+        self.assertRaises(TypeError, getMessage([["", "", "!"], ["", "mundo", ""], None]))
+
+    def test_message_not_match(self):
+        """Test that the message cant be display because a missmatch"""
+        msg = getMessage([["", "", "!"], ["", "mundo", ""], ["Hola", "", "chau"]])
+        self.assertIsNone(msg)
+
+    def test_get_message_with_delay(self):
+        """Test that the correct message is display"""
+        msg = getMessage([["", "", "!"], ["", "mundo", ""], ["", "Hola", "", "!"]])
+        self.assertEqual(msg, "Hola mundo !")
