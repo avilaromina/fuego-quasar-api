@@ -1,3 +1,4 @@
 # from django.db import models
 
-# Create your models here.
+# class Transmission(models.Model):
+#     """Ingredient to be used in a recipe"""
