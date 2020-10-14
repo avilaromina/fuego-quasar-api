@@ -8,3 +8,11 @@ SATELLITES = {
     'skywalker': SKYWALKER_COORD,
     'sato': SATO_COORD
 }
+
+# Temporary satellite reception
+
+tmp_transmissions = {
+    'kenobi': None,
+    'skywalker': None,
+    'sato': None,
+}

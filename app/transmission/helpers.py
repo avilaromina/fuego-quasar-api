@@ -1,7 +1,7 @@
 import math
 import numpy
 
-from .constants import SATELLITES
+from .constants import SATELLITES, tmp_transmissions
 
 
 def get_location(distances):
@@ -72,4 +72,23 @@ def get_message(msg_array):
 
 def map_distances(msg_list):
     return dict([(msg['name'], msg['distance'])for msg in msg_list])
-    
+
+
+def set_temp_distances(satellite, distance, message):
+    tmp_transmissions[satellite] = (distance, message)
+
+
+def get_temp_distances(satellites):
+    msg = []
+    for satellite in satellites:
+        msg.append({
+            'name': satellite,
+            'distance': tmp_transmissions[satellite][0] if tmp_transmissions[satellite] else None,
+            'message': tmp_transmissions[satellite][1] if tmp_transmissions[satellite] else None,
+        })
+    return msg
+
+
+def clear_tmp_distances():
+    for satellite in SATELLITES.keys():
+        tmp_transmissions[satellite] = None

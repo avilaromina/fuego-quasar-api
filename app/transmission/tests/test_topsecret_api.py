@@ -7,6 +7,7 @@ from rest_framework.test import APIClient
 
 
 TOPSECRET_URL = reverse('transmission:topsecret')
+TOPSECRET_SPLIT_KENOBI_URL = reverse('transmission:topsecret_split', kwargs={'name': 'kenobi'})
 
 
 class TopSecretApiTests(TestCase):
@@ -147,3 +148,26 @@ class TopSecretApiTests(TestCase):
             res.data,
             {'satellites': [ErrorDetail(string='Ensure this field has at least 3 elements.', code='min_length')]}
         )
+
+
+class TopSecretSplitApiTests(TestCase):
+    """Test the top secret split API"""
+
+    def setUp(self):
+        self.client = APIClient()
+
+    def test_post_msg_and_distance(self):
+        """"Test save coordinates and message"""
+        payload = {
+            "distance": 485.7,
+            "message": ["este", "", "", "mensaje", ""]
+        }
+        output = [{
+            'name': 'kenobi',
+            'distance': 485.7,
+            'message': ["este", "", "", "mensaje", ""]
+        }]
+        res = self.client.post(TOPSECRET_SPLIT_KENOBI_URL, payload, format='json')
+
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(res.data, output)
