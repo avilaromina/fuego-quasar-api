@@ -84,11 +84,17 @@ def set_temp_distances(satellite, distance, message):
 def get_temp_distances(satellites):
     msg = []
     for satellite in satellites:
-        msg.append({
-            'name': satellite,
-            'distance': tmp_transmissions[satellite][0] if tmp_transmissions[satellite] else None,
-            'message': tmp_transmissions[satellite][1] if tmp_transmissions[satellite] else None,
-        })
+        msg.append(
+            {
+                "name": satellite,
+                "distance": tmp_transmissions[satellite][0]
+                if tmp_transmissions[satellite]
+                else None,
+                "message": tmp_transmissions[satellite][1]
+                if tmp_transmissions[satellite]
+                else None,
+            }
+        )
     return msg
 
 
