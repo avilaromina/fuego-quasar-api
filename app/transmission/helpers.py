@@ -1,7 +1,10 @@
 import math
 import numpy
 
-from .constants import SATELLITES, tmp_transmissions
+from .constants import (
+    SATELLITES,
+    tmp_transmissions,
+)
 
 
 def get_location(distances):
