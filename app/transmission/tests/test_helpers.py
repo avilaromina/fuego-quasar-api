@@ -29,6 +29,11 @@ class get_locationTests(TestCase):
         coord = get_location({'kenobi': 485.7, 'skywalker': 266.1, 'sato': 600})
         self.assertIsNone(coord)
 
+    def test_cant_get_location_duplicate_sattelite(self):
+        """Test that the location is not return because distances do not correspond to a valid coordinate"""
+        coord = get_location({'kenobi': 485.7, 'skywalker': 266.1, 'kenobi': 600})  # noqa: F601
+        self.assertIsNone(coord)
+
 
 class get_messageTests(TestCase):
     """Test the get_message method"""

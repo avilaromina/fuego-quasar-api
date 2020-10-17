@@ -1,9 +1,10 @@
 from rest_framework import serializers
 
+from .constants import SATELLITES_NAMES
 
-class VkObjectSerializer(serializers.Serializer):
-    """Object serializer"""
-    name = serializers.ChoiceField(choices=('kenobi', 'skywalker', 'sato'))
+
+class TopSecretSplitSerializer(serializers.Serializer):
+    """Top Secret Split Serializer"""
     distance = serializers.DecimalField(max_digits=None, decimal_places=2)
     message = serializers.ListField(
         child=serializers.CharField(allow_blank=True),
@@ -11,10 +12,15 @@ class VkObjectSerializer(serializers.Serializer):
     )
 
 
-class VkBaseSerializer(serializers.Serializer):
-    """Base serializer"""
+class TopSecretObjectSerializer(TopSecretSplitSerializer):
+    """Top Secret API object serializer"""
+    name = serializers.ChoiceField(choices=(SATELLITES_NAMES))
+
+
+class TopSecretBaseSerializer(serializers.Serializer):
+    """Top Secret API base serializer"""
     satellites = serializers.ListField(
-        child=VkObjectSerializer(),
+        child=TopSecretObjectSerializer(),
         allow_empty=False,
         min_length=3,
         max_length=3

@@ -3,5 +3,5 @@ djangorestframework>=3.9.0,<3.10.0
 psycopg2>=2.7.5,<2.8.0
 
 flake8>=3.6.0,<3.10.0
-numpy>=1.19.0
 ipdb>=0.13.4
+numpy>=1.19.0

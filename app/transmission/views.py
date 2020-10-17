@@ -1,9 +1,15 @@
 from rest_framework import status
-from rest_framework.exceptions import APIException
+from rest_framework.exceptions import (
+    APIException,
+    ValidationError,
+)
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .constants import SATELLITES
+from .constants import (
+    SATELLITES,
+    SATELLITES_NAMES,
+)
 from transmission.helpers import (
     clear_tmp_distances,
     get_location,
@@ -12,13 +18,16 @@ from transmission.helpers import (
     map_distances,
     set_temp_distances,
 )
-from transmission.serializer import VkBaseSerializer
+from transmission.serializer import (
+    TopSecretBaseSerializer,
+    TopSecretSplitSerializer,
+)
 
 
 class TopSecretView(APIView):
     permission_classes = []
     http_method_names = ['post']
-    serializer_class = VkBaseSerializer
+    serializer_class = TopSecretBaseSerializer
 
     def post(self, request, *args, **kwargs):
         valid_ser = self.serializer_class(data=request.data)
@@ -53,14 +62,23 @@ class TopSecretView(APIView):
 class TopSecretSplitView(APIView):
     permission_classes = []
     http_method_names = ['post', 'get']
+    serializer_class = TopSecretSplitSerializer
 
     def post(self, request, *args, **kwargs):
-        set_temp_distances(
-            kwargs['name'],
-            request.data.get('distance'),
-            request.data.get('message')
-        )
-        return Response(get_temp_distances([kwargs['name']]))
+        satellite = kwargs['name']
+        if satellite in SATELLITES_NAMES:
+            valid_ser = self.serializer_class(data=request.data)
+            if valid_ser.is_valid():
+                set_temp_distances(
+                    satellite,
+                    request.data.get('distance'),
+                    request.data.get('message')
+                )
+                return Response(get_temp_distances([satellite]))
+            else:
+                raise APIException(valid_ser.errors)
+        else:
+            raise ValidationError('{} isn\'t a valid sattelite name'.format(satellite))
 
     def get(self, request, *args, **kwargs):
 

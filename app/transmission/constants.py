@@ -1,7 +1,11 @@
+# Satellites names
+SATELLITES_NAMES = ['kenobi', 'skywalker', 'sato']
+
 # Satellites coordinates
 KENOBI_COORD = [-500, -200]
 SKYWALKER_COORD = [100, -100]
 SATO_COORD = [500, 100]
+
 
 SATELLITES = {
     'kenobi': KENOBI_COORD,
@@ -10,7 +14,6 @@ SATELLITES = {
 }
 
 # Temporary satellite reception
-
 tmp_transmissions = {
     'kenobi': None,
     'skywalker': None,
