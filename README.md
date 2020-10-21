@@ -26,7 +26,7 @@ satélite debido al campo de asteroides frente a la nave.
   * Formato esperado (JSON): Objeto que contiene un Array de diccionarios por satelite cuyas keys son el nombre, la distancia del mismo hacia el emisor y un array de strings que se corresponde con el mensaje recibido.
 
     Ej mensaje y coordenada correctas:
-    ```json
+    ```
     {
       "position":{
           "x":-100.0,
@@ -111,7 +111,7 @@ satélite debido al campo de asteroides frente a la nave.
   * Formato esperado (JSON): Objeto con la informacion correspondiente al satelite: nombre, distancia y mensaje.
 
     Ej mensaje y coordenada correctas:
-    ```json
+    ```
     {
       "name": "kenobi"
       "distance": 100,
@@ -147,7 +147,7 @@ satélite debido al campo de asteroides frente a la nave.
   * Formato esperado (JSON): Objeto con la informacion correspondiente al satelite: nombre, distancia y mensaje.
 
     Ej mensaje y coordenada correctas:
-    ```json
+    ```
     {
       "name": "kenobi"
       "position":{
