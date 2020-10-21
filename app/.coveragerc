@@ -6,3 +6,6 @@ omit =
     core/*
     debug_*.py
     manage.py
+    transmission/__init__.py
+    transmission/apps.py
+    transmission/tests/*.py

@@ -13,28 +13,28 @@ TOPSECRET_SPLIT_PALPATINE_URL = reverse('transmission:topsecret_split', kwargs={
 
 
 class TopSecretApiTests(TestCase):
-    """Test the top secret API"""
+    """Test topsecret API"""
 
     def setUp(self):
         self.client = APIClient()
 
     def test_retrieve_coordinates_and_message(self):
-        """"Test retrieving coordinates and message"""
+        """"Test retrieve coordinates and message"""
         payload = {
             'satellites': [
                 {
                     "name": "kenobi",
-                    "distance": 485.7,
+                    "distance": 485.41,
                     "message": ["este", "", "", "mensaje", ""]
                 },
                 {
                     "name": "skywalker",
-                    "distance": 266.1,
+                    "distance": 265.75,
                     "message": ["", "es", "", "", "secreto"]
                 },
                 {
                     "name": "sato",
-                    "distance": 600.5,
+                    "distance": 600.52,
                     "message": ["este", "", "un", "", ""]
                 }
             ]
@@ -42,7 +42,7 @@ class TopSecretApiTests(TestCase):
         output = {
             'position': {
                 'x': -100.0,
-                'y': 75.5
+                'y': 75.0
             },
             'message': 'este es un mensaje secreto'
         }
@@ -51,7 +51,7 @@ class TopSecretApiTests(TestCase):
         self.assertEqual(res.data, output)
 
     def test_distances_not_correspond_to_coordinate(self):
-        """"Test error recieve when distances no correspond to a valid point"""
+        """"Test invalid distances"""
         payload = {
             'satellites': [
                 {
@@ -73,35 +73,35 @@ class TopSecretApiTests(TestCase):
         }
         res = self.client.post(TOPSECRET_URL, payload, format='json')
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(res.data, 'The distances not correspond to a valid coordinate.')
+        self.assertEqual(res.data, 'Distances do not match a valid coordinate.')
 
     def test_one_message_is_empty(self):
-        """"Test error recieve when a message is missing"""
+        """"Test empty message"""
         payload = {
             'satellites': [
                 {
                     "name": "kenobi",
-                    "distance": 485.7,
+                    "distance": 485.41,
                     "message": ["este", "", "", "mensaje", ""]
                 },
                 {
                     "name": "skywalker",
-                    "distance": 266.1,
+                    "distance": 265.75,
                     "message": ["", "es", "", "", "secreto"]
                 },
                 {
                     "name": "sato",
-                    "distance": 600.5,
+                    "distance": 600.52,
                     "message": []
                 }
             ]
         }
         res = self.client.post(TOPSECRET_URL, payload, format='json')
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(res.data, "The message cant be display because the all the messages aren't the same.")
+        self.assertEqual(res.data, "Invalid message or format.")
 
     def test_one_message_is_missing(self):
-        """"Test error recieve when a message is missing"""
+        """"Test single missing message"""
         payload = {
             'satellites': [
                 {
@@ -129,7 +129,7 @@ class TopSecretApiTests(TestCase):
         )
 
     def test_missing_one_satellite_data(self):
-        """Test error when all data from one satellite is missing"""
+        """Test single satellite missing data"""
         payload = {
             'satellites': [
                 {
@@ -152,7 +152,7 @@ class TopSecretApiTests(TestCase):
         )
 
     def test_satellite_name_is_not_valid(self):
-        """"Test satellite name is not valid"""
+        """"Test invalid satellite name"""
         payload = {
             'satellites': [
                 {
@@ -186,7 +186,7 @@ class TopSecretApiTests(TestCase):
         )
 
     def test_duplicate_information_for_same_satellite(self):
-        """"Test that recieve dupliclate inforamtion about the same satellite"""
+        """"Test dupliclate satellite names"""
         payload = {
             'satellites': [
                 {
@@ -208,11 +208,11 @@ class TopSecretApiTests(TestCase):
         }
         res = self.client.post(TOPSECRET_URL, payload, format='json')
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(res.data, 'The distances not correspond to a valid coordinate.')
+        self.assertEqual(res.data, 'Distances do not match a valid coordinate.')
 
 
 class TopSecretSplitApiTests(TestCase):
-    """Test the top secret split API"""
+    """Test topsecret_split API"""
 
     def setUp(self):
         self.client = APIClient()
@@ -245,7 +245,7 @@ class TopSecretSplitApiTests(TestCase):
         self.assertEqual(res.data, {'distance': [ErrorDetail(string='A valid number is required.', code='invalid')]})
 
     def test_post_invalid_satellite_name(self):
-        """"Test that the satellite name is invalid"""
+        """"Test invalid satellite name"""
         payload = {
             "distance": 782.89,
             "message": ["este", "", "", "mensaje", ""]
@@ -255,7 +255,7 @@ class TopSecretSplitApiTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(res.data, [ErrorDetail(string="palpatine isn't a valid sattelite name", code='invalid')])
 
-    @skip('Serializer doesn\'t validate that the message only contains STR')
+    @skip('Serializer can\'t validate message format')
     def test_post_invalid_message(self):
         """"Test invalid distance"""
         payload = {
@@ -268,16 +268,16 @@ class TopSecretSplitApiTests(TestCase):
         self.assertEqual(res.data, {'message': [ErrorDetail(string='Not a valid string.', code='invalid')]})
 
     def test_get_coordinates_and_message(self):
-        """Test retrieve mesage and coordinates previously loaded"""
+        """Test retrieve previously loaded message and coordinates"""
         tmp_transmissions = {
-            'kenobi': (485.7, ["este", "", "", "mensaje", ""]),
-            'skywalker': (266.1, ["", "es", "", "", "secreto"]),
-            'sato': (600.5, ["este", "", "un", "", ""]),
+            'kenobi': (485.41, ["este", "", "", "mensaje", ""]),
+            'skywalker': (265.75, ["", "es", "", "", "secreto"]),
+            'sato': (600.52, ["este", "", "un", "", ""]),
         }
         output = {
             'position': {
                 'x': -100.0,
-                'y': 75.5
+                'y': 75.0
             },
             'message': 'este es un mensaje secreto'
         }
@@ -287,15 +287,15 @@ class TopSecretSplitApiTests(TestCase):
             self.assertEqual(res.data, output)
 
     def test_second_get_dont_show_message_and_coordinates(self):
-        """Test that after retrieve mesage and coordinates previously loaded, the second call doesn't shown anything"""
+        """Test empty call after retrieving previously loaded messages"""
         tmp_transmissions = {
-            'kenobi': (485.7, ["este", "", "", "mensaje", ""]),
-            'skywalker': (266.1, ["", "es", "", "", "secreto"]),
-            'sato': (600.5, ["este", "", "un", "", ""]),
+            'kenobi': (485.41, ["", "este", "", "", "mensaje", ""]),
+            'skywalker': (265.75, ["", "", "es", "", "", "secreto"]),
+            'sato': (600.52, ["", "este", "", "un", "", ""]),
         }
         with mock.patch('transmission.helpers.tmp_transmissions', tmp_transmissions):
             res = self.client.get(TOPSECRET_SPLIT_KENOBI_URL)
             self.assertEqual(res.status_code, status.HTTP_200_OK)
             res2 = self.client.get(TOPSECRET_SPLIT_KENOBI_URL)
             self.assertEqual(res2.status_code, status.HTTP_400_BAD_REQUEST)
-            self.assertEqual(res2.data, 'The distances not correspond to a valid coordinate.')
+            self.assertEqual(res2.data, 'Distances do not match a valid coordinate.')

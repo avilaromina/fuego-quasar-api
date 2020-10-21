@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .constants import SATELLITES_NAMES
+from .constants import SAT_CHOICES
 
 
 class TopSecretSplitSerializer(serializers.Serializer):
@@ -14,7 +14,7 @@ class TopSecretSplitSerializer(serializers.Serializer):
 
 class TopSecretObjectSerializer(TopSecretSplitSerializer):
     """Top Secret API object serializer"""
-    name = serializers.ChoiceField(choices=(SATELLITES_NAMES))
+    name = serializers.ChoiceField(choices=(SAT_CHOICES))
 
 
 class TopSecretBaseSerializer(serializers.Serializer):

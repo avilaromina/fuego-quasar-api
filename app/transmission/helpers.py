@@ -13,47 +13,48 @@ def get_location(distances):
     PB = numpy.array(SATELLITES['skywalker'])
     PC = numpy.array(SATELLITES['sato'])
 
-    if set(SATELLITES_NAMES) == set(list(distances.keys())):
-        try:
-            ex = (PB - PA) / (numpy.linalg.norm(PB - PA))
-            i = numpy.dot(ex, PC - PA)
-            ey = (PC - PA - i * ex) / (numpy.linalg.norm(PC - PA - i * ex))
-            d = numpy.linalg.norm(PB - PA)
-            j = numpy.dot(ey, PC - PA)
+    try:
+        ex = (PB - PA) / (numpy.linalg.norm(PB - PA))
+        i = numpy.dot(ex, PC - PA)
+        ey = (PC - PA - i * ex) / (numpy.linalg.norm(PC - PA - i * ex))
+        d = numpy.linalg.norm(PB - PA)
+        j = numpy.dot(ey, PC - PA)
 
-            x = (pow(distances['kenobi'], 2) - pow(distances['skywalker'], 2) + pow(d, 2)) / (2 * d)
-            y = (
-                (pow(distances['kenobi'], 2) - pow(distances['sato'], 2) + pow(i, 2) + pow(j, 2))
-                / (2 * j)
-            ) - ((i / j) * x)
-            coord = PA + x * ex + y * ey
+        x = (pow(distances['kenobi'], 2) - pow(distances['skywalker'], 2) + pow(d, 2)) / (2 * d)
+        y = (
+            (pow(distances['kenobi'], 2) - pow(distances['sato'], 2) + pow(i, 2) + pow(j, 2))
+            / (2 * j)
+        ) - ((i / j) * x)
+        coord = PA + x * ex + y * ey
 
-            return (
-                numpy.round(coord, 1)
-                if _coordinates_are_valid(coord, distances, SATELLITES)
-                else None
-            )
-        except TypeError:
-            pass
-    else:
-        return None
+        return (
+            numpy.round(coord, 1)
+            if _coordinates_are_valid(coord, distances)
+            else None
+        )
+    except TypeError:
+        pass
 
 
-def _coordinates_are_valid(coordinates, distances, satellites):
-    for sat in satellites.items():
+def _coordinates_are_valid(coordinates, distances):
+    for sat in SATELLITES.items():
         sat_coord = numpy.array(sat[1])
         if (
             round(
                 math.sqrt(
-                    (coordinates[0] - sat_coord[0]) ** 2
-                    + (coordinates[1] - sat_coord[1]) ** 2
+                    (round(coordinates[0]) - sat_coord[0]) ** 2
+                    + (round(coordinates[1]) - sat_coord[1]) ** 2
                 ),
-                1,
+                2,
             )
             != distances[sat[0]]
         ):
             return False
     return True
+
+
+def validate_is_satellites_are_correct(satellites_names):
+    return set(SATELLITES_NAMES) == set(satellites_names)
 
 
 def get_message(msg_array):
@@ -68,7 +69,7 @@ def get_message(msg_array):
                     if word is not None and msg[-i] != word and msg[-i] != '':
                         return None
                     word = word if msg[-i] == '' else msg[-i]
-                final_msg = ' ' + word + final_msg
+                final_msg = (' ' + word + final_msg) if word is not None else final_msg
                 i += 1
             return final_msg[1:]
         else:
@@ -78,7 +79,7 @@ def get_message(msg_array):
 
 
 def map_distances(msg_list):
-    return dict([(msg['name'], msg['distance'])for msg in msg_list])
+    return dict([(msg['name'].lower(), msg['distance'])for msg in msg_list])
 
 
 def set_temp_distances(satellite, distance, message):

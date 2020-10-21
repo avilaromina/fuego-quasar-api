@@ -10,54 +10,49 @@ class get_locationTests(TestCase):
     """Test the get_location method"""
 
     def test_get_location(self):
-        """Test that the correct location is calculated"""
-        coord = get_location({'kenobi': 485.7, 'skywalker': 266.1, 'sato': 600.5})
+        """Test correct location"""
+        coord = get_location({'kenobi': 485.41, 'skywalker': 265.75, 'sato': 600.52})
 
-        self.assertEqual(coord[0], -100.0)
-        self.assertEqual(coord[1], 75.5)
+        self.assertEqual(coord[0], -100)
+        self.assertEqual(coord[1], 75)
 
     def test_cant_get_location_missing_distance(self):
-        """Test that the location cant be calculated because a distance is missing"""
+        """Test missing distance"""
         self.assertRaises(TypeError, get_location({'kenobi': 485.7, 'skywalker': 266.1, 'sato': None}))
 
     def test_cant_get_location_invalid_distance(self):
-        """Test that the location cant be calculated because a distance has a wrong type"""
+        """Test mistype distance"""
         self.assertRaises(TypeError, get_location({'kenobi': 485.7, 'skywalker': 266.1, 'sato': 'Text'}))
 
     def test_cant_get_location_invalid_distances(self):
-        """Test that the location is not return because distances do not correspond to a valid coordinate"""
+        """Test invalid coordinate"""
         coord = get_location({'kenobi': 485.7, 'skywalker': 266.1, 'sato': 600})
-        self.assertIsNone(coord)
-
-    def test_cant_get_location_duplicate_sattelite(self):
-        """Test that the location is not return because distances do not correspond to a valid coordinate"""
-        coord = get_location({'kenobi': 485.7, 'skywalker': 266.1, 'kenobi': 600})  # noqa: F601
         self.assertIsNone(coord)
 
 
 class get_messageTests(TestCase):
-    """Test the get_message method"""
+    """Test get_message method"""
 
     def test_get_message(self):
-        """Test that the correct message is display"""
+        """Test correct message"""
         msg = get_message([["", "", "!"], ["", "mundo", ""], ["Hola", "", "!"]])
         self.assertEqual(msg, "Hola mundo !")
 
     def test_incomplete_message(self):
-        """Test that the message cant be display because is incomplete"""
+        """Test incomplete message"""
         self.assertRaises(TypeError, get_message([["", "", "!"], ["", "mundo", ""], None]))
 
     def test_empty_message(self):
-        """Test that the message cant be display because is incomplete"""
+        """Test invalid message"""
         msg = get_message([["", "", "!"], ["", "mundo", ""], []])
         self.assertIsNone(msg)
 
     def test_message_not_match(self):
-        """Test that the message cant be display because a missmatch"""
+        """Test mismatch message"""
         msg = get_message([["", "", "!"], ["", "mundo", ""], ["Hola", "", "chau"]])
         self.assertIsNone(msg)
 
     def test_get_message_with_delay(self):
-        """Test that the correct message is display"""
+        """Test message delay"""
         msg = get_message([["", "", "!"], ["", "mundo", ""], ["", "", "", "", "Hola", "", "!"]])
         self.assertEqual(msg, "Hola mundo !")

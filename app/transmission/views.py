@@ -17,6 +17,7 @@ from transmission.helpers import (
     get_temp_distances,
     map_distances,
     set_temp_distances,
+    validate_is_satellites_are_correct,
 )
 from transmission.serializer import (
     TopSecretBaseSerializer,
@@ -34,17 +35,18 @@ class TopSecretView(APIView):
         if valid_ser.is_valid():
             satellites = request.data.get('satellites')
 
-            location, message = get_location_and_message(satellites)
+            location = get_location_if_valid(satellites)
 
             if location is None:
                 return Response(
-                    "The distances not correspond to a valid coordinate.",
+                    "Distances do not match a valid coordinate.",
                     status.HTTP_400_BAD_REQUEST
                 )
 
+            message = get_message([satellite['message'] for satellite in satellites])
             if message is None:
                 return Response(
-                    "The message cant be display because the all the messages aren't the same.",
+                    "Invalid message or format.",
                     status.HTTP_400_BAD_REQUEST
                 )
 
@@ -70,7 +72,7 @@ class TopSecretSplitView(APIView):
             valid_ser = self.serializer_class(data=request.data)
             if valid_ser.is_valid():
                 set_temp_distances(
-                    satellite,
+                    satellite.lower(),
                     request.data.get('distance'),
                     request.data.get('message')
                 )
@@ -83,17 +85,18 @@ class TopSecretSplitView(APIView):
     def get(self, request, *args, **kwargs):
 
         satellites = get_temp_distances(SATELLITES.keys())
-        location, message = get_location_and_message(satellites)
+        location = get_location_if_valid(satellites)
 
         if location is None:
             return Response(
-                "The distances not correspond to a valid coordinate.",
+                "Distances do not match a valid coordinate.",
                 status.HTTP_400_BAD_REQUEST
             )
 
+        message = get_message([satellite['message'] for satellite in satellites])
         if message is None:
             return Response(
-                "The message cant be display because the all the messages aren't the same.",
+                "Invalid message or format.",
                 status.HTTP_400_BAD_REQUEST
             )
 
@@ -108,7 +111,8 @@ class TopSecretSplitView(APIView):
         })
 
 
-def get_location_and_message(satellites):
-    location = get_location(map_distances(satellites))
-    message = get_message([satellite['message'] for satellite in satellites])
-    return location, message
+def get_location_if_valid(satellites):
+    distances = map_distances(satellites)
+    if validate_is_satellites_are_correct(list(distances.keys())):
+        return get_location(distances)
+    return None
