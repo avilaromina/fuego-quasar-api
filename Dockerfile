@@ -13,5 +13,11 @@ RUN mkdir /app
 WORKDIR /app
 COPY ./app /app
 
+# collect static files
+RUN python manage.py collectstatic --noinput
+
 RUN adduser -D user
 USER user
+
+# run gunicorn
+CMD gunicorn app.wsgi:application --bind 0.0.0.0:$PORT
