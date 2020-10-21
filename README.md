@@ -16,7 +16,7 @@ satélite debido al campo de asteroides frente a la nave.
 ## API:
 
 * /api/transmission/topsecret/  
-  https://fuego-quasar-api-python.herokuapp.com/api/transmission/topsecret/
+  http://127.0.0.1:8000/api/transmission/topsecret/
 
   * Tipo: POST
   * Respuesta para **mensaje y coordenadas correctas: 200 (OK)**
@@ -26,7 +26,7 @@ satélite debido al campo de asteroides frente a la nave.
   * Formato esperado (JSON): Objeto que contiene un Array de diccionarios por satelite cuyas keys son el nombre, la distancia del mismo hacia el emisor y un array de strings que se corresponde con el mensaje recibido.
 
     Ej mensaje y coordenada correctas:
-    ```
+    ```json
     {
       "position":{
           "x":-100.0,
@@ -35,9 +35,75 @@ satélite debido al campo de asteroides frente a la nave.
       "message":"este es un mensaje secreto"
     }
     ```
+  
+  * Ejemplos
+    ```json
+    POST /api/transmission/topsecret/ (VALID RESPONSE)
+    {
+      "satellites":[
+        {
+          "name":"kenobi",
+          "distance":838.08,
+          "message":["", "May", "", "", "be", "", "you"]
+        },
+        {
+          "name":"skywalker",
+          "distance":311.1,
+          "message":["", "", "", "", "", "the", "", "", "", "you"]
+        },
+        {
+          "name":"sato",
+          "distance":259.2,
+          "message":["", "", "", "the", "force", "", "with", ""]
+        }
+      ]
+    }
+    
+    POST /api/transmission/topsecret/ (VALID RESPONSE)
+    {
+      "satellites":[
+        {
+          "name":"kenobi",
+          "distance":515.39,
+          "message":["", "have", "a", "", "feeling", "", "this"]
+        },
+        {
+          "name":"skywalker",
+          "distance":406.97,
+          "message":["", "", "", "", "have", "", "bad", "", "about", ""]
+        },
+        {
+          "name":"sato",
+          "distance":682.37,
+          "message":[ "", "I", "", "a", "bad", "", "about", "this"]
+        }
+      ]
+    }
+
+    POST /api/transmission/topsecret/ (INVALID RESPONSE)
+    {
+      "satellites":[
+        {
+          "name":"kenobi",
+          "distance":100.0,
+          "message":["este", "", "", "mensaje", ""]
+        },
+        {
+          "name":"skywalker",
+          "distance":115.5,
+          "message":["", "es", "", "", "secreto"]
+        },
+        {
+          "name":"sato",
+          "distance":142.7,
+          "message":["este", "", "un", "", ""]
+        }
+    ]
+    }
+    ```
 
 * /api/transmission/topsecret_split/{name}  
-  https://fuego-quasar-api-python.herokuapp.com/api/transmission/topsecret_split/kenobi
+  http://127.0.0.1:8000/api/transmission/topsecret_split/kenobi
 
   * Tipo: POST
   * Respuesta para **mensaje y distancia en formato correcto: 200 OK**
@@ -45,14 +111,34 @@ satélite debido al campo de asteroides frente a la nave.
   * Formato esperado (JSON): Objeto con la informacion correspondiente al satelite: nombre, distancia y mensaje.
 
     Ej mensaje y coordenada correctas:
-    ```
+    ```json
     {
       "name": "kenobi"
-      "distance": 100.5,
+      "distance": 100,
       "message": ["", "es", "", "mensaje", "secreto"]
     }
     ```
-  
+  * Ejemplos para testear el endpoint
+    ```json
+    POST /api/transmission/topsecret_split/kenobi
+    {
+      "distance":838.08,
+      "message":["", "May", "", "", "be", "", "you"]
+    }
+
+    POST /api/transmission/topsecret_split/skywalker
+    {
+      "distance":311.1,
+      "message":["", "", "", "", "", "the", "", "", "", "you"]
+    }
+
+    POST /api/transmission/topsecret_split/sato
+    {
+      "distance":259.2,
+      "message":["", "", "", "the", "force", "", "with", ""]
+    }
+    ```
+
   * Tipo: GET
   * Respuesta para **mensaje y coordenadas correctas: 200 (OK)**
   * Respuesta para **mensaje incompleto: 400 (Bad request)**
@@ -61,12 +147,12 @@ satélite debido al campo de asteroides frente a la nave.
   * Formato esperado (JSON): Objeto con la informacion correspondiente al satelite: nombre, distancia y mensaje.
 
     Ej mensaje y coordenada correctas:
-    ```
+    ```json
     {
       "name": "kenobi"
       "position":{
-          "x":-100.0,
-          "y":75.5
+          "x":-100,
+          "y":75
       },
       "message": ["", "es", "", "mensaje", "secreto"]
     }
@@ -99,5 +185,5 @@ Romina Avila Luque
 
 ## Extras
 
-* Documento con el detalle de las decisiones tomadas en cada momento del proceso del desarrolo de este ejercicio  https://docs.google.com/document/d/18sxlvXxaQc1GLLNtY6dm4C6sjxhZULyC9Id9vvzMrgM/edit?usp=sharing.
-* Planilla para calcular los valores a utilizar en las llamadas a la API  https://docs.google.com/spreadsheets/d/1Co_eCKnmSDfRzUgrIYautIs_SNLvGRytnTDhCUDGmYQ/edit?usp=sharing
+* [Documento](https://docs.google.com/document/d/18sxlvXxaQc1GLLNtY6dm4C6sjxhZULyC9Id9vvzMrgM/edit?usp=sharing) con el detalle de las decisiones tomadas en cada momento del proceso del desarrolo de este ejercicio.
+* [Planilla](https://docs.google.com/spreadsheets/d/1Co_eCKnmSDfRzUgrIYautIs_SNLvGRytnTDhCUDGmYQ/edit?usp=sharing) para calcular los valores a utilizar en las llamadas a la API.
