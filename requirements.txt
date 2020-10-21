@@ -6,6 +6,3 @@ flake8>=3.6.0,<3.10.0
 ipdb>=0.13.4
 numpy>=1.19.0
 coverage>=5.0
-
-gunicorn
-django-heroku
