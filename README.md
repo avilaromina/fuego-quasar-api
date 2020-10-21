@@ -58,7 +58,9 @@ satélite debido al campo de asteroides frente a la nave.
         }
       ]
     }
-    
+    ```
+
+    ```json
     POST /api/transmission/topsecret/ (VALID RESPONSE)
     {
       "satellites":[
@@ -79,7 +81,9 @@ satélite debido al campo de asteroides frente a la nave.
         }
       ]
     }
+    ```
 
+    ```json
     POST /api/transmission/topsecret/ (INVALID RESPONSE)
     {
       "satellites":[
@@ -125,13 +129,17 @@ satélite debido al campo de asteroides frente a la nave.
       "distance":838.08,
       "message":["", "May", "", "", "be", "", "you"]
     }
+    ```
 
+    ```json
     POST /api/transmission/topsecret_split/skywalker
     {
       "distance":311.1,
       "message":["", "", "", "", "", "the", "", "", "", "you"]
     }
+    ```
 
+    ```json
     POST /api/transmission/topsecret_split/sato
     {
       "distance":259.2,
